@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t jayzziebone/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true jayzziebone/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t jayzziebone/multi-client ./client
+    - docker build -t jayzziebone/multi-nginx ./nginx
+    - docker build -t jayzziebone/multi-server ./server
+    - docker build -t jayzziebone/multi-worker ./worker
+    # Log in to docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # push images to Docker hub
+    - docker push jayzziebone/multi-client
+    - docker push jayzziebone/multi-nginx
+    - docker push jayzziebone/multi-server
+    - docker puch jayzziebone/multi-worker
