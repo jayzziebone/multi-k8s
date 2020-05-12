@@ -20,4 +20,4 @@ after_success:
     - docker push jayzziebone/multi-client
     - docker push jayzziebone/multi-nginx
     - docker push jayzziebone/multi-server
-    - docker puch jayzziebone/multi-worker
+    - docker push jayzziebone/multi-worker
